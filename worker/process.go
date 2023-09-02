@@ -57,7 +57,7 @@ func (p *Process) Send(pl interface{}) (string, error) {
 	}
 }
 
-func (p *Process) Check(taskID string) (interface{}, error) {
+func (p *Process) Check(taskID string) (interface{}, string, error) {
 	c := &Command{
 		Cmd:    "check_process_finished",
 		TaskID: taskID,
@@ -68,15 +68,15 @@ func (p *Process) Check(taskID string) (interface{}, error) {
 	for {
 		select {
 		case <-ticker.C:
-			return "", errors.New("timeout")
+			return "", "error", errors.New("timeout")
 		case ca := <-p.answerCh:
 			if ca.Err != nil {
-				return nil, ca.Err
+				return nil, ca.Result, ca.Err
 			}
 			if ca.Result == "wait" {
-				return nil, nil
+				return nil, ca.Result, nil
 			}
-			return ca.Payload, nil
+			return ca.Payload, ca.Result, nil
 		}
 	}
 }
