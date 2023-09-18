@@ -34,8 +34,9 @@ func TestQueue(t *testing.T) {
 	}
 	for {
 		time.Sleep(time.Millisecond)
-		plo, err := proc.Check(taskID)
+		plo, result, err := proc.Check(taskID)
 		require.NoError(t, err)
+		require.Equal(t, "", result)
 		if plo != nil {
 			require.Equal(t, expectPlO, plo)
 			break
