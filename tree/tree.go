@@ -82,8 +82,17 @@ func (t *Tree) CheckString(str string) (int, interface{}, bool) {
 }
 
 type DictionaryItem struct {
-	Item string
-	Id   string
+	Item    string
+	Id      string
+	payload interface{}
+}
+
+func (di *DictionaryItem) SetPayload(payload interface{}) {
+	di.payload = payload
+}
+
+func (di *DictionaryItem) GetPayload() interface{} {
+	return di.payload
 }
 
 func (t *Tree) AddToDictionary(lst []*DictionaryItem) error {
